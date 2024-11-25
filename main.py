@@ -4,10 +4,10 @@ from keras.models import Sequential
 from keras.layers import Conv1D, AveragePooling1D, Dropout, MaxPooling1D, Flatten, Dense 
 import os
 
-X_train = np.load('X_train.npy')
-X_val = np.load('X_val.npy')
-y_train = np.load('y_train.npy')
-y_val = np.load('y_val.npy')
+X_train = np.load('data/X_train.npy')
+X_val = np.load('data/X_val.npy')
+y_train = np.load('data/y_train.npy')
+y_val = np.load('data/y_val.npy')
 
 sample_shape = (18496,1)
 
@@ -48,7 +48,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
 model.fit(X_train,
           y_train,
           batch_size=512,
-          epochs=500,
+          epochs=10,
           verbose=1,
           validation_data=(X_val, y_val),
           callbacks=[cp_callback])

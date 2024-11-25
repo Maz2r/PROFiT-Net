@@ -83,3 +83,9 @@ $RECYCLE.BIN/
 *.swp
 *~
 .nfs*
+
+
+
+wandb/*
+callback/*
+./*.npy

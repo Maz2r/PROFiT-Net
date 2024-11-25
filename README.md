@@ -45,3 +45,21 @@ python predict.py
 
 # Pretrained models
 Contact: linus16@kaist.ac.kr
+
+
+
+
+# ver. torch
+Make another virtual environment for torch version profit-net.
+```
+conda create torch_env python==3.9
+conda activate pytorch_env
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+pip install wandb pynvml
+```
+
+You can check the availability of your GPUs with torch_test.py.
+- `python torch_test.py`
+
+
+python torch_main.py

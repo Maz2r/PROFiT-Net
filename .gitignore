@@ -2,6 +2,11 @@
 callback/
 data/
 dataset/
+raw_dataset/
+
+wandb/*
+callback/*
+./*.npy
 
 # Byte-compiled files
 *.py[cod]
@@ -83,9 +88,3 @@ $RECYCLE.BIN/
 *.swp
 *~
 .nfs*
-
-
-
-wandb/*
-callback/*
-./*.npy

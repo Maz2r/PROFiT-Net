@@ -1,65 +1,95 @@
-# PRoperty-networking Orbital Field maTrix-convolutional neural Network (PROFiT-Net)
 
-# Package
-python==3.8 
+# Deep Learning Project: CNN-based Prediction Framework
 
-tensorflow==2.2.0
+This project implements a framework for training and evaluating convolutional neural networks (CNNs) using Keras. It supports multiple target labels and includes data preprocessing, training, and prediction utilities.
 
-numpy==1.18.5
+## Features
+- **Data Preprocessing**:
+  - Extracts `.tar` files and processes data into `.csv` and `.npy` formats.
+  - Splits data into training, validation, and test sets.
 
-pymatgen==2023.2.22
+- **Model Training**:
+  - Train CNN models for specific target labels.
+  - Supports model checkpointing for resuming training or prediction.
 
-matminer==0.7.4
+- **Prediction**:
+  - Load pre-trained models to make predictions on test data.
+  - Provides performance statistics (MAE, MSE, R²) after predictions.
 
-# Setup for PROFiT
-cp matrix.py cgcnn_atom_feature.json Polarizability.table matminer/featurizers/structure
-
-# Other models
-Crystal Graph Convolutional Neural Networks (CGCNN): https://github.com/txie-93/cgcnn [Phys. Rev. Lett. 120, 145301 (2018)]
-
-MatErials Graph Network (MEGNet): https://github.com/materialsvirtuallab/megnet [Chem. Mater. 31, 3564−3572 (2019)]
-
-Orbital Graph Convolutional Neural Network (OGCNN): https://github.com/RishikeshMagar/OGCNN [Phys. Rev. Mater. 4, 093801 (2020)]
-
-# Dataset
-Dielecric constant: [J. Chem. Phys. 153, 024503 (2020)]
-
-PBE(+U)-level DFT band gap: [Phys. Rev. Lett. 120, 145301 (2018)]
-
-HSE06-level DFT band gap: [Sci. Data 7, 387 (2020)]
-
-Experimental band gap: [J. Chem. Theory Comput. 15, 5069-5079 (2019)]
-
-PBE(+U)-level DFT formation enthalpy: [Phys. Rev. Lett. 120, 145301 (2018)]
-
-Experimental formation enthalpy: [JACS Au 2, 1964-1977 (2022)]
-
-# Produce PROFiT from a CIF file
-python data.py
-
-# Train and validate the model
-python main.py
-
-# Predict a target property using the model
-python predict.py
-
-# Pretrained models
-Contact: linus16@kaist.ac.kr
-
-
-
-
-# ver. torch
-Make another virtual environment for torch version profit-net.
+## Project Structure
 ```
-conda create torch_env python==3.9
-conda activate pytorch_env
-conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
-pip install wandb pynvml
+deep_learning_project/
+├── src/
+│   ├── data/
+│   │   ├── preprocess_data.py      # Script for preprocessing .tar files
+│   │   ├── data_loader.py          # DataLoader for loading .npy files
+│   ├── models/
+│   │   ├── keras/
+│   │   │   ├── cnn_model.py        # CNN model definition for Keras
+│   ├── train/
+│   │   ├── keras/
+│   │   │   ├── train.py            # Training script for Keras
+│   ├── predict/
+│   │   ├── keras/
+│   │   │   ├── predict.py          # Prediction script for Keras
+│   ├── utils/
+│   │   ├── callbacks.py            # Custom callbacks for training
+│   │   ├── target_labels.py        # Abbreviation and mapping of target labels
+├── tests/                          # Unit tests for components
+├── data/                           # Directory for processed .npy files
+├── dataset/                        # Directory for extracted .csv files
+├── callback/                       # Directory for model checkpoints
 ```
 
-You can check the availability of your GPUs with torch_test.py.
-- `python torch_test.py`
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Maz2r/PROFiT-Net.git
+   cd PROFiT-Net
+   ```
 
+2. Set up a Conda environment:
+   - Create a new Conda environment (recommended name: `PROFiT-Net`):
+     ```bash
+     conda create --name PROFiT-Net python=3.8
+     conda activate PROFiT-Net
+     ```
+   - Install required dependencies:
+     ```bash
+     pip install -r requirements.txt
+     ```
 
-python torch_main.py
+3. Set up the project structure:
+   - Ensure `src/` and its subdirectories are in place.
+   - Create `data/`, `dataset/`, and `callback/` directories if they don't already exist.
+
+## Target Labels and Abbreviations
+To simplify usage, the target properties are abbreviated as follows:
+- `exp_bg` → `exp_band_gap2`
+- `exp_fe` → `exp_formation_enthalpy`
+- `hse06` → `hse06_band_gap`
+- `pbe_u` → `pbe_+u_band_gap`
+
+Use these abbreviations in commands when specifying target labels.
+
+## Usage
+### Data Preprocessing
+Preprocess `.tar` files into `.csv` and `.npy` formats:
+```bash
+python src/data/preprocess_data.py path_to_tar_file.tar 0.6 0.2 0.2
+```
+
+### Train
+Train a model for a specific target label (e.g., `exp_bg` for `exp_band_gap2`):
+```bash
+python src/train/keras/train.py exp_bg
+```
+
+### Predict
+Make predictions using a pre-trained model:
+```bash
+python src/predict/keras/predict.py exp_bg
+```
+
+## Forked Repository
+This project is forked from [PROFiT-Net](https://github.com/sejunkim6370/PROFiT-Net). 

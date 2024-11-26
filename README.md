@@ -16,31 +16,6 @@ This project implements a framework for training and evaluating convolutional ne
   - Load pre-trained models to make predictions on test data.
   - Provides performance statistics (MAE, MSE, R²) after predictions.
 
-## Project Structure
-```
-deep_learning_project/
-├── src/
-│   ├── data/
-│   │   ├── preprocess_data.py      # Script for preprocessing .tar files
-│   │   ├── data_loader.py          # DataLoader for loading .npy files
-│   ├── models/
-│   │   ├── keras/
-│   │   │   ├── cnn_model.py        # CNN model definition for Keras
-│   ├── train/
-│   │   ├── keras/
-│   │   │   ├── train.py            # Training script for Keras
-│   ├── predict/
-│   │   ├── keras/
-│   │   │   ├── predict.py          # Prediction script for Keras
-│   ├── utils/
-│   │   ├── callbacks.py            # Custom callbacks for training
-│   │   ├── target_labels.py        # Abbreviation and mapping of target labels
-├── tests/                          # Unit tests for components
-├── data/                           # Directory for processed .npy files
-├── dataset/                        # Directory for extracted .csv files
-├── callback/                       # Directory for model checkpoints
-```
-
 ## Installation
 1. Clone the repository:
    ```bash

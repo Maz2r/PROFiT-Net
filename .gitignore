@@ -1,9 +1,12 @@
 # Ignoring directories
-callback/
 data/
+!src/data/
+!src/data/**
+
 dataset/
 raw_dataset/
 
+callback/
 wandb/*
 callback/*
 ./*.npy

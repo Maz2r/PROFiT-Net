@@ -8,6 +8,7 @@ raw_dataset/
 
 callback/
 callback_torch/
+callback_torch_2d/
 wandb/*
 callback/*
 callback_torch/*
@@ -15,6 +16,7 @@ callback_torch/*
 fetched_weights/*
 
 predictions.txt
+predictions_2d.txt
 
 artifacts/
 

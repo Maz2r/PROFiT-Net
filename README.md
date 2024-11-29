@@ -28,7 +28,7 @@ PROFiT-Net is a machine learning model designed to optimize the prediction of ma
   - Splits data into training, validation, and test sets.
 
 - **Model Training**:
-  - Train CNN models for specific target labels using Keras or PyTorch.
+  - Train CNN models for specific target labels using Keras, PyTorch, or PyTorch 2D models.
   - Supports model checkpointing for resuming training or prediction.
 
 - **Prediction**:
@@ -152,6 +152,19 @@ python src/train/pytorch/train.py exp_bg \
   --target_mae_deviation 0.02 \ 
   --patience 10
 ```
+
+#### PyTorch 2D Version
+Train a 2D CNN model for a specific target label (e.g., `exp_bg` for `exp_band_gap2`):
+```bash
+python src/train/pytorch/train_2d.py exp_bg \ 
+  --batch_size 128 \ 
+  --learning_rate 0.0005 \ 
+  --epochs 300 \ 
+  --target_mae 0.5 \ 
+  --target_mae_deviation 0.02 \ 
+  --patience 10
+```
+
 If not specified by command line argument, basic configuration in the code will be used.
 
 ### 🔍 Prediction
@@ -167,8 +180,19 @@ Make predictions using a pre-trained model:
    ```bash
    python src/predict/pytorch/predict.py exp_bg xyz123
    ```
-   - `exp_bg` is the target abbreviation.
-   - `xyz123` is the run ID associated with the model.
+
+2. The script will:
+   - Fetch the weights from WandB and save them under `artifacts/`.
+   - Make predictions on the test data.
+   - Log metrics (e.g., MAE, MSE) and other details to WandB.
+   - Print a detailed prediction summary to the console.
+
+#### PyTorch 2D Version
+Make predictions using a 2D pre-trained model:
+1. Provide the target abbreviation and the WandB run ID of the desired model checkpoint:
+   ```bash
+   python src/predict/pytorch/predict_2d.py exp_bg xyz123
+   ```
 
 2. The script will:
    - Fetch the weights from WandB and save them under `artifacts/`.
@@ -204,4 +228,4 @@ To fetch the model weights stored in WandB as artifacts:
 ---
 
 ## 🔗 Forked Repository
-This project is forked from [PROFiT-Net](https://github.com/sejunkim6370/PROFiT-Net). 
+This project is forked from [PROFiT-Net](https://github.com/sejunkim6370/PROFiT-Net).

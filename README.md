@@ -167,7 +167,7 @@ To fetch the model weights stored in WandB as artifacts:
 1. Initialize WandB:
    ```python
    import wandb
-   wandb.init(project="PROFiT-Net", entity="cnmd-phb-postech")
+   wandb.init(project="Your Project", entity="Your Entity")
    ```
 
 2. Fetch the desired artifact:

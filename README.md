@@ -1,7 +1,24 @@
 
 # 🚀 PROFiT-Net: Optimizing Material Property Prediction
 
-PROFiT-Net is a machine learning model designed to optimize the prediction of material properties by leveraging deep learning architectures. It integrates domain-specific knowledge with advanced neural networks to improve accuracy and efficiency in predicting key material properties such as band gaps, formation enthalpies, and other physical or chemical attributes. The model focuses on feature extraction and training strategies tailored for material science datasets, making it a powerful tool for accelerating research in materials discovery and design.
+PROFiT-Net is a machine learning model designed to optimize the prediction of material properties by leveraging deep learning architectures. It integrates domain-specific knowledge with advanced neural networks to improve accuracy and efficiency in predicting key material properties such as band gaps, formation enthalpies, and other physical or chemical attributes. The model focuses on feature extraction and training strategies tailored for material science datasets, making it a powerful tool for ac...
+
+---
+
+## 📑 Table of Contents
+1. [Features](#-features)
+2. [Data Directory Structure](#-data-directory-structure)
+3. [Packages Used](#-packages-used)
+4. [Installation](#️-installation)
+   - [Keras Version](#keras-version)
+   - [PyTorch Version](#pytorch-version)
+5. [Target Labels and Abbreviations](#-target-labels-and-abbreviations)
+6. [Usage](#-usage)
+   - [Data Preprocessing](#-data-preprocessing)
+   - [Training](#️-training)
+   - [Prediction](#-prediction)
+7. [WandB Integration](#-wandb-integration)
+8. [Forked Repository](#-forked-repository)
 
 ---
 
@@ -127,8 +144,15 @@ python src/train/keras/train.py exp_bg
 #### PyTorch Version
 Train a model for a specific target label (e.g., `exp_bg` for `exp_band_gap2`):
 ```bash
-python src/train/pytorch/train.py exp_bg
+python src/train/pytorch/train.py exp_bg \ 
+  --batch_size 128 \ 
+  --learning_rate 0.0005 \ 
+  --epochs 300 \ 
+  --target_mae 0.5 \ 
+  --target_mae_deviation 0.02 \ 
+  --patience 10
 ```
+If not specified by command line argument, basic configuration in the code will be used.
 
 ### 🔍 Prediction
 #### Keras Version

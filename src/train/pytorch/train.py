@@ -1,5 +1,6 @@
 import os
 import sys
+import argparse
 
 # Add project root directory to PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
@@ -131,15 +132,8 @@ def train_model(target_abbreviation, config):
 
 
 if __name__ == "__main__":
-    # Validate command-line arguments
-    if len(sys.argv) != 2:
-        print("Usage: python src/train/pytorch/train.py <target_abbreviation>")
-        sys.exit(1)
-
-    target_abbreviation = sys.argv[1]
-
-    # Example configuration
-    config = {
+    # Basic configuration
+    basic_config = {
         'batch_size': 128,
         'learning_rate': 0.001,
         'epochs': 500,
@@ -148,4 +142,26 @@ if __name__ == "__main__":
         'patience': 5,
     }
 
-    train_model(target_abbreviation, config)
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Train a CNN model.")
+    parser.add_argument("target_abbreviation", type=str, help="Target label abbreviation (e.g., exp_bg).")
+    parser.add_argument("--batch_size", type=int, default=basic_config['batch_size'], help="Batch size for training.")
+    parser.add_argument("--learning_rate", type=float, default=basic_config['learning_rate'], help="Learning rate.")
+    parser.add_argument("--epochs", type=int, default=basic_config['epochs'], help="Number of epochs.")
+    parser.add_argument("--target_mae", type=float, default=basic_config['target_mae'], help="Target MAE for early stopping.")
+    parser.add_argument("--target_mae_deviation", type=float, default=basic_config['target_mae_deviation'], help="Target MAE deviation.")
+    parser.add_argument("--patience", type=int, default=basic_config['patience'], help="Patience for early stopping.")
+
+    args = parser.parse_args()
+
+    # Update configuration with command-line arguments
+    config = {
+        'batch_size': args.batch_size,
+        'learning_rate': args.learning_rate,
+        'epochs': args.epochs,
+        'target_mae': args.target_mae,
+        'target_mae_deviation': args.target_mae_deviation,
+        'patience': args.patience,
+    }
+
+    train_model(args.target_abbreviation, config)

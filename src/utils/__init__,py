@@ -1,4 +1,6 @@
 # This file marks the "utils" directory as a Python package
 from .callbacks import Callbacks
+from .target_labels import TargetLabels
+from .gpu_monitor import log_gpu_usage
 
-__all__ = ["Callbacks"]
+__all__ = ["Callbacks", "TargetLabels", "log_gpu_usage"]

@@ -7,9 +7,12 @@ dataset/
 raw_dataset/
 
 callback/
+callback_torch/
 wandb/*
 callback/*
+callback_torch/*
 ./*.npy
+fetched_weights/*
 
 # Byte-compiled files
 *.py[cod]

@@ -2,6 +2,8 @@
 data/
 !src/data/
 !src/data/**
+optimization/*
+temp/*
 
 dataset/
 raw_dataset/

@@ -151,8 +151,13 @@ if __name__ == "__main__":
     parser.add_argument("--target_mae", type=float, default=basic_config['target_mae'], help="Target MAE for early stopping.")
     parser.add_argument("--target_mae_deviation", type=float, default=basic_config['target_mae_deviation'], help="Target MAE deviation.")
     parser.add_argument("--patience", type=int, default=basic_config['patience'], help="Patience for early stopping.")
+    parser.add_argument("--wandb_api", type=str, default="src/wandb_apikey.txt", help="Path to WandB API key file.")
 
     args = parser.parse_args()
+
+    # Initialize WandB
+    with open(args.wandb_api, 'r') as f:
+        wandb_api_key = f.read().strip()
 
     # Update configuration with command-line arguments
     config = {

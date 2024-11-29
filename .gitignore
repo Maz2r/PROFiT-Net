@@ -14,6 +14,10 @@ callback_torch/*
 ./*.npy
 fetched_weights/*
 
+predictions.txt
+
+artifacts/
+
 # Byte-compiled files
 *.py[cod]
 __pycache__/

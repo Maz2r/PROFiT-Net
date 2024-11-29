@@ -1,7 +1,7 @@
 
 # 🚀 PROFiT-Net: Optimizing Material Property Prediction
 
-PROFiT-Net is a machine learning model designed to optimize the prediction of material properties by leveraging deep learning architectures. It integrates domain-specific knowledge with advanced neural networks to improve accuracy and efficiency in predicting key material properties such as band gaps, formation enthalpies, and other physical or chemical attributes. The model focuses on feature extraction and training strategies tailored for material science datasets, making it a powerful tool for ac...
+PROFiT-Net is a machine learning model designed to optimize the prediction of material properties by leveraging deep learning architectures. It integrates domain-specific knowledge with advanced neural networks to improve accuracy and efficiency in predicting key material properties such as band gaps, formation enthalpies, and other physical or chemical attributes. The model focuses on feature extraction and training strategies tailored for material science datasets, making it a powerful tool for accelerating research in materials discovery and design.
 
 ---
 
@@ -171,7 +171,7 @@ Make predictions using a pre-trained model:
    - `xyz123` is the run ID associated with the model.
 
 2. The script will:
-   - Fetch the weights from WandB and save them under `fetched_weights/`.
+   - Fetch the weights from WandB and save them under `artifacts/`.
    - Make predictions on the test data.
    - Log metrics (e.g., MAE, MSE) and other details to WandB.
    - Print a detailed prediction summary to the console.

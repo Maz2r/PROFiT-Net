@@ -4,19 +4,18 @@ import sys
 # Add project root directory to PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
 
-import numpy as np
 import torch
+import numpy as np
+from torch.utils.data import DataLoader, TensorDataset
 from src.models.pytorch.cnn_model import CNNModel
 from src.utils.target_labels import TargetLabels
-from sklearn.metrics import mean_absolute_error
 import wandb
-
 
 def predict_model(target_abbreviation, run_id):
     # Initialize WandB
     wandb.init(
         project="SePROFiT-Net",  # Replace with your WandB project name
-        name=f"predict_{target_abbreviation}_{run_id}",
+        name=f"predict_{target_abbreviation}",
         entity='cnmd-phb-postech'
     )
 
@@ -30,24 +29,10 @@ def predict_model(target_abbreviation, run_id):
 
     target_full_name = targets[target_abbreviation]
     data_dir = os.path.join(os.getcwd(), 'data', target_full_name)
-    local_weights_dir = os.path.join(f'fetched_weights/{target_abbreviation}')
-    os.makedirs(local_weights_dir, exist_ok=True)
-    weights_path = os.path.join(local_weights_dir, f'{target_abbreviation}_{run_id}_cp.pt')
 
     # Validate data directory
     if not os.path.exists(data_dir):
         print(f"Error: Data directory '{data_dir}' does not exist.")
-        wandb.finish()
-        return
-
-    # Fetch model weights from WandB
-    artifact_name = f"{target_abbreviation}_{run_id}:latest"
-    artifact = wandb.use_artifact(artifact_name, type='model')
-    artifact_dir = artifact.download(local_weights_dir)
-    weights_path = os.path.join(artifact_dir, f"{target_abbreviation}_{run_id}_cp.pt")
-
-    if not os.path.exists(weights_path):
-        print(f"Error: Weights file '{weights_path}' does not exist.")
         wandb.finish()
         return
 
@@ -58,34 +43,47 @@ def predict_model(target_abbreviation, run_id):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # Convert data to PyTorch tensors
-    X_test, y_test = torch.tensor(X_test).float().unsqueeze(1).to(device), torch.tensor(y_test).float().to(device)
+    X_test, y_test = torch.tensor(X_test).float().unsqueeze(1), torch.tensor(y_test).float()
+
+    test_loader = DataLoader(TensorDataset(X_test, y_test), batch_size=128, shuffle=False)
+
+    # Fetch model weights from WandB
+    artifact_name = f"{target_abbreviation}_{run_id}:latest"
+    artifact = wandb.use_artifact(artifact_name, type='model')
+    artifact_dir = artifact.download()
 
     # Load model
+    checkpoint_path = os.path.join(artifact_dir, f"{target_abbreviation}_{run_id}_cp.pt")
     model = CNNModel(X_test.shape[2]).to(device)
-    model.load_state_dict(torch.load(weights_path, weights_only = True))
+    model.load_state_dict(torch.load(checkpoint_path, weights_only=True))
     model.eval()
 
     # Make predictions
+    predictions, answers, differences = [], [], []
     with torch.no_grad():
-        predictions = model(X_test).squeeze().cpu().numpy()
+        for X_batch, y_batch in test_loader:
+            X_batch = X_batch.to(device)
+            preds = model(X_batch).squeeze().cpu().numpy()
+            predictions.extend(preds)
+            answers.extend(y_batch.numpy())
+            differences.extend(np.abs(preds - y_batch.numpy()))
 
-    # Calculate metrics
-    mae = mean_absolute_error(y_test.cpu().numpy(), predictions)
-    mse = np.mean((y_test.cpu().numpy() - predictions) ** 2)
+    # Save predictions and answers to a file
+    output_file = os.path.join(os.getcwd(), f"predictions.txt")
+    with open(output_file, "w") as f:
+        f.write(f"{'Answer':<15}{'Prediction':<15}{'Difference':<15}\n")
+        f.write(f"{'-'*45}\n")
+        for answer, prediction, diff in zip(answers, predictions, differences):
+            f.write(f"{answer:<15.4f}{prediction:<15.4f}{diff:<15.4f}\n")
 
-    # Log results to WandB
+    print(f"Predictions, answers, and differences saved to {output_file}")
+
+    # Log predictions summary to WandB
     wandb.log({
-        'mean_absolute_error': mae,
-        'mean_squared_error': mse,
+        "mean_absolute_error": np.mean(np.abs(np.array(answers) - np.array(predictions))),
+        "mean_squared_error": np.mean((np.array(answers) - np.array(predictions)) ** 2)
     })
 
-    # Print detailed prediction summary
-    print(f"Prediction Summary for {target_abbreviation} (Run ID: {run_id}):")
-    print(f"- Mean Absolute Error (MAE): {mae:.4f}")
-    print(f"- Mean Squared Error (MSE): {mse:.4f}")
-    print(f"- Predictions (Sample): {predictions[:10]}")  # Print first 10 predictions
-
-    # Finish WandB session
     wandb.finish()
 
 

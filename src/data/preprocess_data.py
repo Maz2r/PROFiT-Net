@@ -39,6 +39,10 @@ def process_tar_file(tar_file_path, train_ratio, val_ratio, test_ratio):
     
     # Load and preprocess CSV file
     df = pd.read_csv(csv_file_path)
+    
+    # Replace NaN values with 0
+    df.fillna(0, inplace=True)
+    
     if 'id' in df.columns:
         df.drop(columns=['id'], inplace=True)
     if 'target' not in df.columns:

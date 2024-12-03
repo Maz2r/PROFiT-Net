@@ -54,7 +54,7 @@ def train_model(target_abbreviation, config):
     X_val = np.load(os.path.join(data_dir, 'X_val.npy')).reshape(-1, 1, 136, 136)
     y_val = np.load(os.path.join(data_dir, 'y_val.npy'))
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
 
     # Convert data to PyTorch tensors
     X_train, y_train = torch.tensor(X_train).float(), torch.tensor(y_train).float()
@@ -241,15 +241,20 @@ if __name__ == "__main__":
         'target_mae': args.target_mae,
         'target_mae_deviation': args.target_mae_deviation,
         'patience': args.patience,
-        # 'conv_params_list'를 추가해야 합니다.
+        # 'conv_params_list': [
+        #     {'out_channels': 64, 'kernel_size': 5, 'stride': 1, 'dropout': 0.09460183554710498, 'padding': 1, 'pooling': True, 'pool_type': 'max', 'pool_kernel_size': 2, 'pool_stride': 2},
+        #     {'out_channels': 256, 'kernel_size': 5, 'stride': 1, 'dropout': 0.285329132076415, 'padding': 2, 'pooling': True, 'pool_type': 'avg', 'pool_kernel_size': 3, 'pool_stride': 3},
+        #     {'out_channels': 256, 'kernel_size': 3, 'stride': 2, 'dropout': 0.16741618898992752, 'padding': 1, 'pooling': False},
+        #     {'out_channels': 128, 'kernel_size': 3, 'stride': 2, 'dropout': 0.012046678606404767, 'padding': 1, 'pooling': False},
+        #     {'out_channels': 16, 'kernel_size': 5, 'stride': 1, 'dropout': 0.24857377271302292, 'padding': 2, 'pooling': False},
+        #     {'out_channels': 8, 'kernel_size': 3, 'stride': 1, 'dropout': 0.010277442212012156, 'padding': 2, 'pooling': False}]
         'conv_params_list': [
-            {'out_channels': 64, 'kernel_size': 5, 'stride': 1, 'dropout': 0.21291078237416522, 'padding': 1, 'pooling': True, 'pool_type': 'max', 'pool_kernel_size': 2, 'pool_stride': 2},
-            {'out_channels': 128, 'kernel_size': 5, 'stride': 1, 'dropout': 0.06452651970655704, 'padding': 2, 'pooling': True, 'pool_type': 'avg', 'pool_kernel_size': 3, 'pool_stride': 3},
-            {'out_channels': 256, 'kernel_size': 3, 'stride': 2, 'dropout': 0.24113487303279377, 'padding': 1, 'pooling': False},
-            {'out_channels': 128, 'kernel_size': 3, 'stride': 2, 'dropout': 0.0011451651354115154, 'padding': 1, 'pooling': False},
-            {'out_channels': 32, 'kernel_size': 5, 'stride': 1, 'dropout': 0.2732738140527152, 'padding': 2, 'pooling': False},
-            {'out_channels': 8, 'kernel_size': 3, 'stride': 1, 'dropout': 0.01142270380343106, 'padding': 2, 'pooling': False}
-        ]
+            {'out_channels': 64, 'kernel_size': 3, 'stride': 1, 'dropout': 0.022619643042184424, 'padding': 1, 'pooling': True, 'pool_type': 'max', 'pool_kernel_size': 2, 'pool_stride': 2}, 
+            {'out_channels': 64, 'kernel_size': 5, 'stride': 1, 'dropout': 0.018550920452541125, 'padding': 1, 'pooling': True, 'pool_type': 'avg', 'pool_kernel_size': 2, 'pool_stride': 2}, 
+            {'out_channels': 512, 'kernel_size': 3, 'stride': 2, 'dropout': 0.03665319673331538, 'padding': 1, 'pooling': False}, 
+            {'out_channels': 256, 'kernel_size': 3, 'stride': 2, 'dropout': 0.24892610174689753, 'padding': 0, 'pooling': False}, 
+            {'out_channels': 64, 'kernel_size': 3, 'stride': 1, 'dropout': 0.0063697458729987215, 'padding': 0, 'pooling': False}, 
+            {'out_channels': 16, 'kernel_size': 3, 'stride': 1, 'dropout': 0.006249500338933435, 'padding': 1, 'pooling': False}]
     }
 
     # 'config'를 데이터프레임에 업데이트

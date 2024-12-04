@@ -20,7 +20,7 @@ def train_model(target_abbreviation, config):
     # Initialize WandB
     wandb.init(
         project="SePROFiT-Net",  # Replace with your WandB project name
-        name=f"train_2d_{target_abbreviation}_{config['num']}",
+        name=f"train_pytorch_2d_optimized_{target_abbreviation}_{config['num']}",
         entity='cnmd-phb-postech',
         config=config
     )
@@ -54,7 +54,7 @@ def train_model(target_abbreviation, config):
     X_val = np.load(os.path.join(data_dir, 'X_val.npy')).reshape(-1, 1, 136, 136)
     y_val = np.load(os.path.join(data_dir, 'y_val.npy'))
 
-    device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # Convert data to PyTorch tensors
     X_train, y_train = torch.tensor(X_train).float(), torch.tensor(y_train).float()
@@ -248,13 +248,20 @@ if __name__ == "__main__":
         #     {'out_channels': 128, 'kernel_size': 3, 'stride': 2, 'dropout': 0.012046678606404767, 'padding': 1, 'pooling': False},
         #     {'out_channels': 16, 'kernel_size': 5, 'stride': 1, 'dropout': 0.24857377271302292, 'padding': 2, 'pooling': False},
         #     {'out_channels': 8, 'kernel_size': 3, 'stride': 1, 'dropout': 0.010277442212012156, 'padding': 2, 'pooling': False}]
+        # 'conv_params_list': [
+        #     {'out_channels': 64, 'kernel_size': 3, 'stride': 1, 'dropout': 0.022619643042184424, 'padding': 1, 'pooling': True, 'pool_type': 'max', 'pool_kernel_size': 2, 'pool_stride': 2}, 
+        #     {'out_channels': 64, 'kernel_size': 5, 'stride': 1, 'dropout': 0.018550920452541125, 'padding': 1, 'pooling': True, 'pool_type': 'avg', 'pool_kernel_size': 2, 'pool_stride': 2}, 
+        #     {'out_channels': 512, 'kernel_size': 3, 'stride': 2, 'dropout': 0.03665319673331538, 'padding': 1, 'pooling': False}, 
+        #     {'out_channels': 256, 'kernel_size': 3, 'stride': 2, 'dropout': 0.24892610174689753, 'padding': 0, 'pooling': False}, 
+        #     {'out_channels': 64, 'kernel_size': 3, 'stride': 1, 'dropout': 0.0063697458729987215, 'padding': 0, 'pooling': False}, 
+        #     {'out_channels': 16, 'kernel_size': 3, 'stride': 1, 'dropout': 0.006249500338933435, 'padding': 1, 'pooling': False}]
         'conv_params_list': [
-            {'out_channels': 64, 'kernel_size': 3, 'stride': 1, 'dropout': 0.022619643042184424, 'padding': 1, 'pooling': True, 'pool_type': 'max', 'pool_kernel_size': 2, 'pool_stride': 2}, 
-            {'out_channels': 64, 'kernel_size': 5, 'stride': 1, 'dropout': 0.018550920452541125, 'padding': 1, 'pooling': True, 'pool_type': 'avg', 'pool_kernel_size': 2, 'pool_stride': 2}, 
-            {'out_channels': 512, 'kernel_size': 3, 'stride': 2, 'dropout': 0.03665319673331538, 'padding': 1, 'pooling': False}, 
-            {'out_channels': 256, 'kernel_size': 3, 'stride': 2, 'dropout': 0.24892610174689753, 'padding': 0, 'pooling': False}, 
-            {'out_channels': 64, 'kernel_size': 3, 'stride': 1, 'dropout': 0.0063697458729987215, 'padding': 0, 'pooling': False}, 
-            {'out_channels': 16, 'kernel_size': 3, 'stride': 1, 'dropout': 0.006249500338933435, 'padding': 1, 'pooling': False}]
+            {'out_channels': 64, 'kernel_size': 5, 'stride': 1, 'dropout': 0.08712642791973504, 'padding': 1, 'pooling': True, 'pool_type': 'max', 'pool_kernel_size': 2, 'pool_stride': 2}, 
+            {'out_channels': 128, 'kernel_size': 5, 'stride': 1, 'dropout': 0.2637521839803184, 'padding': 2, 'pooling': True, 'pool_type': 'avg', 'pool_kernel_size': 2, 'pool_stride': 3}, 
+            {'out_channels': 256, 'kernel_size': 3, 'stride': 2, 'dropout': 0.14799822825817954, 'padding': 1, 'pooling': False}, 
+            {'out_channels': 128, 'kernel_size': 3, 'stride': 2, 'dropout': 0.04423604806894767, 'padding': 1, 'pooling': False}, 
+            {'out_channels': 64, 'kernel_size': 5, 'stride': 1, 'dropout': 0.2790605562309633, 'padding': 2, 'pooling': False}, 
+            {'out_channels': 8, 'kernel_size': 3, 'stride': 1, 'dropout': 0.03979758734003716, 'padding': 2, 'pooling': False}]
     }
 
     # 'config'를 데이터프레임에 업데이트

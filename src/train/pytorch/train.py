@@ -19,7 +19,7 @@ def train_model(target_abbreviation, config):
     # Initialize WandB
     wandb.init(
         project="SePROFiT-Net",  # Replace with your WandB project name
-        name=f"train_{target_abbreviation}",
+        name=f"train_pytorch_1d_{target_abbreviation}",
         entity='cnmd-phb-postech',
         config=config
     )

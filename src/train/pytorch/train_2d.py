@@ -1,6 +1,7 @@
 import os
 import sys
 import argparse
+from dotenv import load_dotenv
 
 # Add project root directory to PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
@@ -36,7 +37,7 @@ def train_model(target_abbreviation, config):
         return
 
     target_full_name = targets[target_abbreviation]
-    data_dir = os.path.join(os.getcwd(), 'data/data', target_full_name)
+    data_dir = os.path.join(os.getcwd(), 'data', target_full_name)
     checkpoint_dir = os.path.join(f'callback_torch_2d/{target_abbreviation}')
     os.makedirs(checkpoint_dir, exist_ok=True)
     checkpoint_path = os.path.join(checkpoint_dir, f'{target_abbreviation}_{run_id}_cp.pt')
@@ -151,13 +152,19 @@ if __name__ == "__main__":
     parser.add_argument("--target_mae", type=float, default=basic_config['target_mae'], help="Target MAE for early stopping.")
     parser.add_argument("--target_mae_deviation", type=float, default=basic_config['target_mae_deviation'], help="Target MAE deviation.")
     parser.add_argument("--patience", type=int, default=basic_config['patience'], help="Patience for early stopping.")
-    parser.add_argument("--wandb_api", type=str, default="src/wandb_apikey.txt", help="Path to WandB API key file.")
 
     args = parser.parse_args()
 
-    # Initialize WandB
-    with open(args.wandb_api, 'r') as f:
-        wandb_api_key = f.read().strip()
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Initialize WandB using the environment variable
+    wandb_api_key = os.getenv("WANDB_API_KEY")
+
+    if not wandb_api_key:
+        raise EnvironmentError(
+            "The environment variable 'WANDB_API_KEY' is not set. Please set it with your WandB API key."
+        )
     
     wandb.login(key=wandb_api_key)
 

@@ -1,5 +1,6 @@
 import os
 import sys
+from dotenv import load_dotenv
 
 # Add project root directory to PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
@@ -15,7 +16,7 @@ def predict_model(target_abbreviation, run_id):
     # Initialize WandB
     wandb.init(
         project="SePROFiT-Net",  # Replace with your WandB project name
-        name=f"predict_1d_{target_abbreviation}_{run_id}",
+        name=f"predict_{target_abbreviation}",
         entity='cnmd-phb-postech'
     )
 
@@ -95,5 +96,18 @@ if __name__ == "__main__":
 
     target_abbreviation = sys.argv[1]
     run_id = sys.argv[2]
+
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Initialize WandB using the environment variable
+    wandb_api_key = os.getenv("WANDB_API_KEY")
+
+    if not wandb_api_key:
+        raise EnvironmentError(
+            "The environment variable 'WANDB_API_KEY' is not set. Please set it with your WandB API key."
+        )
+    
+    wandb.login(key=wandb_api_key)
 
     predict_model(target_abbreviation, run_id)

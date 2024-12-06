@@ -10,8 +10,12 @@ dependencies:
   - torchaudio
   - pytorch-cuda=12.1
   - scikit-learn
+  - matplotlib
   - pip
   - pip:
     - wandb
     - pynvml
     - pandas
+    - shap
+    - optuna
+    - python-dotenv

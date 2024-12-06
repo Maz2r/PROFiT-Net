@@ -1,5 +1,6 @@
 import os
 import sys
+from dotenv import load_dotenv
 
 # Add project root directory to PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
@@ -29,7 +30,7 @@ def predict_model_2d(target_abbreviation, run_id):
         return
 
     target_full_name = targets[target_abbreviation]
-    data_dir = os.path.join(os.getcwd(), 'data/data', target_full_name)
+    data_dir = os.path.join(os.getcwd(), 'data', target_full_name)
 
     # Validate data directory
     if not os.path.exists(data_dir):
@@ -55,6 +56,7 @@ def predict_model_2d(target_abbreviation, run_id):
 
     # Load model
     checkpoint_path = os.path.join(artifact_dir, f"{target_abbreviation}_{run_id}_cp.pt")
+    print(checkpoint_path)
     model = CNNModel_2D().to(device)
     model.load_state_dict(torch.load(checkpoint_path, weights_only=True))
     model.eval()
@@ -96,5 +98,18 @@ if __name__ == "__main__":
 
     target_abbreviation = sys.argv[1]
     run_id = sys.argv[2]
+
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Initialize WandB using the environment variable
+    wandb_api_key = os.getenv("WANDB_API_KEY")
+
+    if not wandb_api_key:
+        raise EnvironmentError(
+            "The environment variable 'WANDB_API_KEY' is not set. Please set it with your WandB API key."
+        )
+    
+    wandb.login(key=wandb_api_key)
 
     predict_model_2d(target_abbreviation, run_id)

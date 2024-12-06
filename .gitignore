@@ -23,7 +23,6 @@ predictions_2d.txt
 artifacts/
 
 ./train_history/
-check_nan.py
 
 # Byte-compiled files
 *.py[cod]

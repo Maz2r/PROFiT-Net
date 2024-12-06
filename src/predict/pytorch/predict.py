@@ -15,7 +15,7 @@ def predict_model(target_abbreviation, run_id):
     # Initialize WandB
     wandb.init(
         project="SePROFiT-Net",  # Replace with your WandB project name
-        name=f"predict_{target_abbreviation}",
+        name=f"predict_1d_{target_abbreviation}_{run_id}",
         entity='cnmd-phb-postech'
     )
 

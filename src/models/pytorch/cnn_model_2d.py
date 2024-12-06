@@ -9,31 +9,31 @@ class CNNModel_2D(nn.Module):
 
         # 2D Convolutional layers with hardcoded architecture
         self.conv_layers = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=64, kernel_size=3, stride=1, padding=1),  # Conv 1
+            nn.Conv2d(in_channels=1, out_channels=64, kernel_size=5, stride=1, padding=1),  # Conv 1
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # Max Pool
-            nn.Dropout(0.022619643042184424),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Dropout(0.08712642791973504),
 
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=5, stride=1, padding=1),  # Conv 2
+            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=5, stride=1, padding=2),  # Conv 2
             nn.ReLU(),
-            nn.AvgPool2d(kernel_size=2, stride=2),  # Avg Pool
-            nn.Dropout(0.0185509204525411256),
+            nn.AvgPool2d(kernel_size=2, stride=3),
+            nn.Dropout(0.2637521839803184),
 
-            nn.Conv2d(in_channels=64, out_channels=512, kernel_size=3, stride=2, padding=1),  # Conv 3
+            nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, stride=2, padding=1),  # Conv 3
             nn.ReLU(),
-            nn.Dropout(0.03665319673331538),
+            nn.Dropout(0.14799822825817954),
 
-            nn.Conv2d(in_channels=512, out_channels=256, kernel_size=3, stride=2, padding=0),  # Conv 4
+            nn.Conv2d(in_channels=256, out_channels=128, kernel_size=3, stride=2, padding=1),  # Conv 4
             nn.ReLU(),
-            nn.Dropout(0.24892610174689753),
+            nn.Dropout(0.04423604806894767),
 
-            nn.Conv2d(in_channels=256, out_channels=64, kernel_size=3, stride=1, padding=0),  # Conv 5
+            nn.Conv2d(in_channels=128, out_channels=64, kernel_size=5, stride=1, padding=2),  # Conv 5
             nn.ReLU(),
-            nn.Dropout(0.0063697458729987215),
+            nn.Dropout(0.2790605562309633),
 
-            nn.Conv2d(in_channels=64, out_channels=16, kernel_size=3, stride=1, padding=1),  # Conv 6
+            nn.Conv2d(in_channels=64, out_channels=8, kernel_size=3, stride=1, padding=2),  # Conv 6
             nn.ReLU(),
-            nn.Dropout(0.006249500338933435),
+            nn.Dropout(0.03979758734003716),
         )
 
         # Calculate the output size after convolutional layers
@@ -55,7 +55,7 @@ class CNNModel_2D(nn.Module):
         )
 
         self._initialize_weights()
-
+    
     def _get_conv_output(self):
         with torch.no_grad():
             sample_input = torch.zeros(1, *self.input_shape)

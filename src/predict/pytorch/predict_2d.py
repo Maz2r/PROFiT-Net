@@ -29,7 +29,7 @@ def predict_model_2d(target_abbreviation, run_id):
         return
 
     target_full_name = targets[target_abbreviation]
-    data_dir = os.path.join(os.getcwd(), 'data', target_full_name)
+    data_dir = os.path.join(os.getcwd(), 'data/data', target_full_name)
 
     # Validate data directory
     if not os.path.exists(data_dir):

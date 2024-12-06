@@ -19,7 +19,7 @@ def train_model(target_abbreviation, config):
     # Initialize WandB
     wandb.init(
         project="SePROFiT-Net",  # Replace with your WandB project name
-        name=f"train_pytorch_1d_{target_abbreviation}",
+        name=f"train_1d_{target_abbreviation}",
         entity='cnmd-phb-postech',
         config=config
     )
@@ -36,7 +36,7 @@ def train_model(target_abbreviation, config):
         return
 
     target_full_name = targets[target_abbreviation]
-    data_dir = os.path.join(os.getcwd(), 'data', target_full_name)
+    data_dir = os.path.join(os.getcwd(), 'data/data', target_full_name)
     checkpoint_dir = os.path.join(f'callback_torch/{target_abbreviation}')
     os.makedirs(checkpoint_dir, exist_ok=True)
     checkpoint_path = os.path.join(checkpoint_dir, f'{target_abbreviation}_{run_id}_cp.pt')
@@ -135,11 +135,11 @@ if __name__ == "__main__":
     # Basic configuration
     basic_config = {
         'batch_size': 128,
-        'learning_rate': 0.001,
+        'learning_rate': 0.0005,
         'epochs': 500,
-        'target_mae': 0.65,
-        'target_mae_deviation': 0.03,
-        'patience': 5,
+        'target_mae': 0.36,
+        'target_mae_deviation': 0.0036,
+        'patience': 3,
     }
 
     # Parse command-line arguments
